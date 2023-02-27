@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@qvant/qui-max": "^0.18.3",
     "animate.css": "^4.1.1",
     "gsap": "^3.11.4",
     "pinia": "^2.0.30",

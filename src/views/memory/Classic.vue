@@ -1,22 +1,47 @@
 <script setup lang="ts">
 import { useMemoryStore } from '@/store/memory-store';
-import { onMounted } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const memory = useMemoryStore()
+const numberOfCards = ref(12)
+const numberOfCardsOptions = [
+  { number: 3, label: 'test' },
+  { number: 12, label: 'einfach' },
+  { number: 24, label: 'mittel' },
+  { number: 36, label: 'schwer' },
+]
+
+const newGame = () => {
+  memory.shuffle(numberOfCards.value)
+}
 
 onMounted(() => {
   memory.deck = [...Array(36).keys()]
     .map(i => i < 9 ? `memoryCards-0${i + 1}` : `memoryCards-${i + 1}`)
+  memory.shuffle(12)
 })
+
+watch(
+  numberOfCards,
+  (value) => {
+    console.log('value ', value)
+    memory.shuffle(value)
+  }
+)
 
 </script>
 
 <template>
-  <button @click="memory.shuffle(12)">shuffle 12</button>
-  <button @click="memory.shuffle(24)">shuffle 24</button>
-  <button @click="memory.shuffle()">shuffle 36/72</button>
+  <div>
+    <div class="deck deck__header">
+      <h3>turns: {{ memory.turns }}</h3>
+      <q-select v-model="numberOfCards">
+        <q-option v-for="item in numberOfCardsOptions" :key="item.number" :label="item.label" :value="item.number" />
+      </q-select>
+    </div>
+    
+  </div>
 
-{{ memory.deckIsHidden }}
   <div class="card__container" v-if="!memory.deckIsHidden">
     <div v-for="card, i in memory.cards" :key="i" @click="memory.process(card)" class="card"
       :class="{ 'flipped': card.isFlipped, 'hidden': card.isHidden }">
@@ -24,10 +49,25 @@ onMounted(() => {
       <img src="/img/cards/memoryCards-37.png" />
     </div>
   </div>
-  <h1>found {{ memory.parisFound }}</h1>
+
+  <div class="deck deck__footer">
+    <q-button @click="newGame">New Game</q-button>
+  </div>
 </template>
 
 <style lang="sass" scoped>
+.deck
+  display: flex
+  justify-content: space-between
+  margin: 1rem  
+  &__header
+    h3
+      margin: 0
+    .q-select
+      width: 40%
+  &__footer
+    margin-top: 2rem
+    justify-content: center
 .card 
   background-color: #4f4d4d4d
   &__container

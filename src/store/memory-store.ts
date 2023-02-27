@@ -7,6 +7,7 @@ interface MemoryState {
   openCards: ICard[];
   parisFound: number;
   deckIsHidden: Boolean;
+  turns: number;
 }
 
 interface ICard {
@@ -21,7 +22,8 @@ export const useMemoryStore = defineStore('memory', {
     cards: [],
     openCards: [],
     parisFound: 0,
-    deckIsHidden: false
+    deckIsHidden: false,
+    turns: 0
   }),
   actions: {
     shuffle(n: number = 0) {
@@ -56,6 +58,7 @@ export const useMemoryStore = defineStore('memory', {
 
       this.openCards.push(card);
       if (this.openCards.length === 2) {
+        this.turns += 1
         if (this.openCards[0].img === this.openCards[1].img) {
           //eventuell sleep?
           this.openCards.forEach((i) => (i.isHidden = true));
