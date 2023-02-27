@@ -119,4 +119,6 @@ watch(
   &--face
     transform: rotateX(0.5turn)
 
+.q-input__inner  
+  box-shadow: none
 </style>

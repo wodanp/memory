@@ -26,8 +26,8 @@ export const useMemoryStore = defineStore('memory', {
     turns: 0
   }),
   actions: {
-    shuffle(n: number = 0) {
-      // this.deckIsHidden = true
+    async shuffle(n: number = 0) {
+      this.deckIsHidden = true
       this.parisFound = 0
       if (n === 0 || n > this.deck.length) n = this.deck.length;
       
@@ -48,9 +48,9 @@ export const useMemoryStore = defineStore('memory', {
           isHidden: false,
         };
       });
-      // setTimeout(() => {
-      //   this.deckIsHidden = false
-      // }, 500);
+      await setTimeout(() => {
+        this.deckIsHidden = false
+      }, 500);
     },
     process(card: ICard) {
       if (card.isHidden || card.isFlipped || this.openCards.length === 2) return;
