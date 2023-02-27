@@ -12,9 +12,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <button @click="memory.shuffle(2)">shuffle 2</button>
-  <button @click="memory.shuffle(4)">shuffle 4</button>
-  <button @click="memory.shuffle()">shuffle</button>
+  <button @click="memory.shuffle(12)">shuffle 12</button>
+  <button @click="memory.shuffle(24)">shuffle 24</button>
+  <button @click="memory.shuffle()">shuffle 36/72</button>
 
 {{ memory.deckIsHidden }}
   <div class="card__container" v-if="!memory.deckIsHidden">
