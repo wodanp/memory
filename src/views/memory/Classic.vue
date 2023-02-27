@@ -74,7 +74,7 @@ watch(
   </div>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass" >
 .deck
   display: flex
   justify-content: space-between
