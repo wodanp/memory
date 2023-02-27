@@ -14,17 +14,23 @@ const numberOfCardsOptions = [
 
 const deck = ref(null)
 const cardWidth = ref('6rem')
-// useResizeObserver(deck, (entries) => {
-//       const entry = entries[0]
-//       const { width, height } = entry.contentRect
+useResizeObserver(deck, (entries) => {
+  const entry = entries[0]
+  const { width, height } = entry.contentRect
 //       let cw = width/16/Math.sqrt(numberOfCards.value)
 //       console.log(cw)
-//       if(cw > 6){
+  if(width > 1024){
+    cardWidth.value = `12rem`
+  }else if(width > 800){
+    cardWidth.value = `9rem`
+  }else{
+    cardWidth.value = `6rem`
+  }
 //         cardWidth.value = `${Math.round(cw*100)/100}rem` 
 //       }else if(cw){
 
 //       }
-//     })
+    })
 
 const newGame = () => {
   memory.shuffle(numberOfCards.value)
@@ -87,6 +93,7 @@ watch(
     margin-bottom: 2rem
   &__footer
     margin-top: 2rem
+    padding-bottom: 3rem
     justify-content: center
 .card 
   background-color: #4f4d4d4d
