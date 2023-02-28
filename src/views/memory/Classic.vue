@@ -28,6 +28,7 @@ useResizeObserver(deck, (entries) => {
 })
 
 const newGame = () => {
+  console.log('newGame')
   memory.shuffle(numberOfCards.value)
 }
 
@@ -107,6 +108,18 @@ const changeGameMode = (mode: string) => {
 </template>
 
 <style lang="sass" >
+// #app::after
+//   content: ' '
+//   display: block
+//   position: absolute
+//   left: 0
+//   top: 0
+//   width: 100%
+//   height: 100%
+//   opacity: 0.2
+//   background-image: url(/img/bg-38.svg)
+//   background-repeat: no-repeat
+//   background-position: right bottom
 .modal
   &__mask
     position: fixed
@@ -129,7 +142,8 @@ const changeGameMode = (mode: string) => {
     background-color: #343434
     padding: 2rem
     border-radius: 2rem
-    width: 50%
+    width: 90%
+    max-width: 37rem
     text-align: center
     position: relative
     h1
