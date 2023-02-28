@@ -33,6 +33,7 @@ useResizeObserver(deck, (entries) => {
     })
 
 const newGame = () => {
+  memory.turns = 0
   memory.shuffle(numberOfCards.value)
 }
 
