@@ -62,17 +62,18 @@ const changeGameMode = (mode: string) => {
   <div class="header">
     <h1 style="text-align: center; margin-bottom: 2rem;">Ein Spieler Memory</h1>
     <div class="deck deck__header">
+      <q-select v-model="numberOfCards">
+        <q-option v-for="item in numberOfCardsOptions" :key="item.number" :label="item.label" :value="item.number" />
+      </q-select>
 
-      <q-radio-group v-model="memory.gameMode" @change="changeGameMode" direction="horizontal">
+      <q-radio-group v-model="memory.gameMode" @change="changeGameMode">
         <q-radio value="classic" label="Klassisch"></q-radio>
         <q-radio value="mutation" label="Mutation"></q-radio>
       </q-radio-group>
 
       <h3>Versuche: {{ memory.turns }}</h3>
 
-      <q-select v-model="numberOfCards">
-        <q-option v-for="item in numberOfCardsOptions" :key="item.number" :label="item.label" :value="item.number" />
-      </q-select>
+
     </div>
 
   </div>
@@ -121,7 +122,10 @@ const changeGameMode = (mode: string) => {
       margin: 0
     .q-select
       width: 40%
+      max-width: 10rem
     margin-bottom: 2rem
+    flex-direction: column
+    gap: 0.5rem
   &__footer
     margin-top: 2rem
     padding-bottom: 3rem
@@ -162,4 +166,8 @@ const changeGameMode = (mode: string) => {
 
 .q-radio__label
   color: var(--c-text) 
+
+@media (min-width: 500px)
+  .deck__header
+    flex-direction: row
 </style>
