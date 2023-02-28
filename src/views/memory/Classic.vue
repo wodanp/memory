@@ -6,10 +6,10 @@ import { useResizeObserver } from '@vueuse/core'
 const memory = useMemoryStore()
 const numberOfCards = ref(12)
 const numberOfCardsOptions = [
-  { number: 3, label: 'test' },
-  { number: 12, label: 'einfach' },
-  { number: 24, label: 'mittel' },
-  { number: 36, label: 'schwer' },
+  { value: 3, label: 'test' },
+  { value: 12, label: 'einfach' },
+  { value: 24, label: 'mittel' },
+  { value: 36, label: 'schwer' },
 ]
 
 const deck = ref(null)
@@ -62,9 +62,14 @@ const changeGameMode = (mode: string) => {
   <div class="header">
     <h1 style="text-align: center; margin-bottom: 2rem;">Ein Spieler Memory</h1>
     <div class="deck deck__header">
-      <q-select v-model="numberOfCards">
+      <!-- <q-select v-model="numberOfCards">
         <q-option v-for="item in numberOfCardsOptions" :key="item.number" :label="item.label" :value="item.number" />
-      </q-select>
+      </q-select> -->
+
+      <q-slider
+        v-model="numberOfCards"
+        :data="numberOfCardsOptions"
+      />
 
       <q-radio-group v-model="memory.gameMode" @change="changeGameMode">
         <q-radio value="classic" label="Klassisch"></q-radio>
@@ -95,11 +100,64 @@ const changeGameMode = (mode: string) => {
   </div>
 
   <div class="deck deck__footer">
-    <q-button @click="newGame">New Game</q-button>
+    <q-button @click="newGame">Neues Spiel</q-button>
   </div>
+
+  <transition name="modal">
+    <div  v-if="memory.isComplete" class="modal__mask">
+      <div class="modal__container">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 modal__close"
+          @click="newGame">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+
+        <h1>Gratulation</h1>
+        <p>Geschafft mit {{ memory.turns }} Versuchen</p>
+        <q-button @click="newGame">Neues Spiel</q-button>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <style lang="sass" >
+.modal
+  &__mask
+    position: fixed
+    z-index: 999
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background-color: rgba(0, 0, 0, 0.5)
+    display: flex
+    justify-content: center
+    align-items: center
+    transition: opacity 0.3s ease
+  &__close
+    width: 2rem
+    position: absolute
+    right: 1rem
+    top: 1rem
+  &__container
+    background-color: #343434
+    padding: 2rem
+    border-radius: 2rem
+    width: 50%
+    text-align: center
+    position: relative
+    h1
+      margin: 0.5rem
+    p
+      margin-bottom: 1rem
+
+.modal-enter-from, .modal-leave-to 
+  opacity: 0
+
+.modal-enter-active .modal-container,
+.modal-leave-active .modal-container 
+  -webkit-transform: scale(1.1)
+  transform: scale(1.1)
+
 .header
   width: 80vw
   margin: 1rem auto
@@ -166,6 +224,14 @@ const changeGameMode = (mode: string) => {
 
 .q-radio__label
   color: var(--c-text) 
+
+.q-slider  
+  max-width: 16rem
+
+.q-slider-captions__caption
+  color: var(--c-text)  
+.q-slider-captions__caption_active  
+  color: #fff
 
 @media (min-width: 500px)
   .deck__header

@@ -10,7 +10,7 @@ interface MemoryState {
     turns: number;
     gameMode: string;
     searchN: number;
-    searchCard: ICard;
+    searchCard: ICard; 
 }
 
 interface ICard {
@@ -35,6 +35,11 @@ export const useMemoryStore = defineStore("memory", {
             isHidden: false,
         },
     }),
+    getters: {
+      isComplete(state){
+        return state.cards.filter(c=>!c.isHidden).length === 0
+      }
+    },
     actions: {
         async shuffle(n: number = 0) {
             console.log("shuffle");
