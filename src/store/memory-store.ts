@@ -5,7 +5,6 @@ interface MemoryState {
     deck: string[];
     cards: ICard[];
     openCards: ICard[];
-    parisFound: number;
     deckIsHidden: Boolean;
     turns: number;
     gameMode: string;
@@ -24,7 +23,6 @@ export const useMemoryStore = defineStore("memory", {
         deck: [],
         cards: [],
         openCards: [],
-        parisFound: 0,
         deckIsHidden: false,
         turns: 0,
         gameMode: "classic",
@@ -42,10 +40,8 @@ export const useMemoryStore = defineStore("memory", {
     },
     actions: {
         async shuffle(n: number = 0) {
-            console.log("shuffle");
             this.turns = 0;
             this.deckIsHidden = true;
-            this.parisFound = 0;
             if (n === 0 || n > this.deck.length) n = this.deck.length;
 
             let cardSelection = fisherYatesShuffle<string>(this.deck);
@@ -87,10 +83,8 @@ export const useMemoryStore = defineStore("memory", {
             card.isFlipped = !card.isFlipped;
 
             if (this.gameMode == "mutation") {
-                console.log("pro");
                 this.turns += 1;
                 if (card.img === this.searchCard.img) {
-                    console.log("richtig");
                     setTimeout(() => {
                       card.isHidden = true;
                       let newSearch = this.cards.filter(c=>!c.isHidden).sort(() => 0.5 - Math.random())[0]
@@ -107,13 +101,12 @@ export const useMemoryStore = defineStore("memory", {
                 if (this.openCards.length === 2) {
                     this.turns += 1;
                     if (this.openCards[0].img === this.openCards[1].img) {
-                        //eventuell sleep?
-                        this.openCards.forEach((i) => (i.isHidden = true));
-                        this.parisFound += 1;
+                        this.openCards[0].isHidden = true
+                        this.openCards[1].isHidden = true
                         this.openCards.length = 0;
                         setTimeout(() => {
                             this.openCards.map((c) => (c.isHidden = true));
-                        }, 800);
+                        }, 400);
                     } else {
                         setTimeout(() => {
                             this.openCards.forEach(

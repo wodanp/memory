@@ -17,8 +17,7 @@ const cardWidth = ref('6rem')
 useResizeObserver(deck, (entries) => {
   const entry = entries[0]
   const { width, height } = entry.contentRect
-  //       let cw = width/16/Math.sqrt(numberOfCards.value)
-  //       console.log(cw)
+
   if (width > 1024) {
     cardWidth.value = `12rem`
   } else if (width > 800) {
@@ -26,10 +25,6 @@ useResizeObserver(deck, (entries) => {
   } else {
     cardWidth.value = `6rem`
   }
-  //         cardWidth.value = `${Math.round(cw*100)/100}rem` 
-  //       }else if(cw){
-
-  //       }
 })
 
 const newGame = () => {
@@ -46,7 +41,6 @@ onMounted(() => {
 watch(
   numberOfCards,
   (value) => {
-    console.log('value ', value)
     memory.shuffle(value)
   }
 )
@@ -62,10 +56,6 @@ const changeGameMode = (mode: string) => {
   <div class="header">
     <h1 style="text-align: center; margin-bottom: 2rem;">Ein Spieler Memory</h1>
     <div class="deck deck__header">
-      <!-- <q-select v-model="numberOfCards">
-        <q-option v-for="item in numberOfCardsOptions" :key="item.number" :label="item.label" :value="item.number" />
-      </q-select> -->
-
       <q-slider
         v-model="numberOfCards"
         :data="numberOfCardsOptions"
@@ -77,10 +67,7 @@ const changeGameMode = (mode: string) => {
       </q-radio-group>
 
       <h3>Versuche: {{ memory.turns }}</h3>
-
-
     </div>
-
   </div>
 
   <div v-if="!memory.deckIsHidden">
@@ -106,10 +93,10 @@ const changeGameMode = (mode: string) => {
   <transition name="modal">
     <div  v-if="memory.isComplete" class="modal__mask">
       <div class="modal__container">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 modal__close"
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 modal__close"
           @click="newGame">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
+        </svg> -->
 
         <h1>Gratulation</h1>
         <p>Geschafft mit {{ memory.turns }} Versuchen</p>
