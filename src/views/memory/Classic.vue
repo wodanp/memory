@@ -17,23 +17,22 @@ const cardWidth = ref('6rem')
 useResizeObserver(deck, (entries) => {
   const entry = entries[0]
   const { width, height } = entry.contentRect
-//       let cw = width/16/Math.sqrt(numberOfCards.value)
-//       console.log(cw)
-  if(width > 1024){
+  //       let cw = width/16/Math.sqrt(numberOfCards.value)
+  //       console.log(cw)
+  if (width > 1024) {
     cardWidth.value = `12rem`
-  }else if(width > 800){
+  } else if (width > 800) {
     cardWidth.value = `9rem`
-  }else{
+  } else {
     cardWidth.value = `6rem`
   }
-//         cardWidth.value = `${Math.round(cw*100)/100}rem` 
-//       }else if(cw){
+  //         cardWidth.value = `${Math.round(cw*100)/100}rem` 
+  //       }else if(cw){
 
-//       }
-    })
+  //       }
+})
 
 const newGame = () => {
-  memory.turns = 0
   memory.shuffle(numberOfCards.value)
 }
 
@@ -52,27 +51,45 @@ watch(
   }
 )
 
-
+const changeGameMode = (mode: string) => {
+  memory.gameMode = mode
+  memory.shuffle(numberOfCards.value)
+}
 
 </script>
 
 <template>
-  <div>
-    <h1 style="text-align: center;">Memory</h1>
+  <div class="header">
+    <h1 style="text-align: center; margin-bottom: 2rem;">Ein Spieler Memory</h1>
     <div class="deck deck__header">
-      <h3>turns: {{ memory.turns }}</h3>
+
+      <q-radio-group v-model="memory.gameMode" @change="changeGameMode" direction="horizontal">
+        <q-radio value="classic" label="Klassisch"></q-radio>
+        <q-radio value="mutation" label="Mutation"></q-radio>
+      </q-radio-group>
+
+      <h3>Versuche: {{ memory.turns }}</h3>
+
       <q-select v-model="numberOfCards">
         <q-option v-for="item in numberOfCardsOptions" :key="item.number" :label="item.label" :value="item.number" />
       </q-select>
     </div>
-    
+
   </div>
 
-  <div class="card__container" v-if="!memory.deckIsHidden"  ref="deck">
-    <div v-for="card, i in memory.cards" :key="i" @click="memory.process(card)" class="card"
-      :class="{ 'flipped': card.isFlipped, 'hidden': card.isHidden }">
-      <img :src="`/img/cards/${card.img}.png`" class="card--face" />
-      <img src="/img/cards/memoryCards-37.png" />
+  <div v-if="!memory.deckIsHidden">
+    <div v-if="memory.gameMode == 'mutation'" class="suche">
+      <div class="card" :class="{ 'flipped': memory.searchCard.isFlipped, 'hidden': memory.searchCard.isHidden }">      
+        <img :src="`/img/cards/${memory.searchCard.img}.png`"  class="card--face"/>
+        <img src="/img/cards/memoryCards-37.png" />
+    </div>
+    </div>
+    <div class="card__container"  ref="deck">
+      <div v-for="card, i in memory.cards" :key="`mode${i}`" @click="memory.process(card)" class="card"
+        :class="{ 'flipped': card.isFlipped, 'hidden': card.isHidden }">
+        <img :src="`/img/cards/${card.img}.png`" class="card--face" />
+        <img src="/img/cards/memoryCards-37.png" />
+      </div>
     </div>
   </div>
 
@@ -82,6 +99,19 @@ watch(
 </template>
 
 <style lang="sass" >
+.header
+  width: 80vw
+  margin: 1rem auto
+  padding: 1rem 
+  border-radius: 2rem
+  background-color: #4f4d4d4d
+
+.suche
+  display: flex
+  justify-content: center
+  margin-bottom: 2rem
+  border-bottom: 1px solid var(--c-text)
+  padding-bottom: 1rem
 .deck
   display: flex
   justify-content: space-between
@@ -129,4 +159,7 @@ watch(
 
 .q-input__inner  
   box-shadow: none
+
+.q-radio__label
+  color: var(--c-text) 
 </style>
