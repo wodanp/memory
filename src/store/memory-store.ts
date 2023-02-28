@@ -90,7 +90,7 @@ export const useMemoryStore = defineStore("memory", {
                       let newSearch = this.cards.filter(c=>!c.isHidden).sort(() => 0.5 - Math.random())[0]
                       Object.assign(this.searchCard, newSearch);
                       this.searchCard.isFlipped = true
-                  }, 800);                  
+                  }, 400);                  
                 } else {
                     setTimeout(() => {
                         card.isFlipped = false;
